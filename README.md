@@ -101,6 +101,14 @@ Wonders count only once construction finishes. The match's end epoch is capped a
 
 **"No memory profile matches this build."** — the executable isn't a supported GOG or Steam Art of Conquest build.
 
+**Your antivirus quarantined Archipelago.** — expected, and it isn't wrong about what it saw. To deliver an item into a running game the client opens the process, allocates a page inside it, marks the page executable, writes a few instructions there and runs them on a new thread. That sequence is what code injection *is*, and a behavioural engine is built to catch exactly it. Add the sequence a network connection to a server and it reads like a remote access trojan.
+
+The difference between this and the real thing is consent and what the code does, and neither is visible to a scanner. So it gets flagged, and you have to decide whether to trust it — the source is right here, which is the only reason you should.
+
+To carry on: restore the quarantined files, then add an exclusion for your Archipelago folder. Exclude that folder, not your whole drive. Turning the antivirus off entirely to play a strategy game is a bad trade.
+
+Three options decide how much the client does: `ingame_messages` and `technology_checks` each run code in the game, and `prevent_match_end` patches a call site without running anything. Turning all three off leaves a client that only reads and writes memory, which some engines are happier with. You lose the message line, technology shuffling, and the guard that stops the game ending your run early.
+
 ---
 
 ## Building the apworld

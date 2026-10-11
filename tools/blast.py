@@ -2,8 +2,13 @@
 
 Empire Earth stores nearly everything in data.ssa as DCL-imploded blobs behind
 a small `PK01` header, which is why only a couple of dozen RIFF chunks are
-visible in a 155 MB archive. Python has no decoder for this, so this is a
-port of Mark Adler's public-domain blast.c.
+visible in a 155 MB archive. Python has no decoder for this, so this is an
+altered version of Mark Adler's blast.c from zlib's contrib, ported to Python.
+
+    Copyright (C) 2003, 2012, 2013 Mark Adler
+
+blast.c is under the zlib licence, not public domain — see LICENSE for the
+terms, which travel with this file.
 
     from blast import blast
     raw = blast(compressed_bytes)

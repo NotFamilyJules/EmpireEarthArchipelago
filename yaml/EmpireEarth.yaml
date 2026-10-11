@@ -107,10 +107,13 @@ Empire Earth:
   opponents: hostile
 
   # Show Archipelago messages on the game's own message line, the one it uses
-  # for things like "Player 'Babylon' is victorious!", prefixed --AP--. This is
-  # the only feature that runs code inside the game rather than just reading and
-  # writing its memory. No game file is touched, and the on-screen overlay keeps
-  # running either way.
+  # for things like "Player 'Babylon' is victorious!", prefixed --AP--. No game
+  # file is touched, and the on-screen overlay keeps running either way.
+  #
+  # This runs code inside the game rather than only reading and writing its
+  # memory, which is what an antivirus objects to. It isn't the only one that
+  # does — technology_checks and prevent_match_end both patch a call site too,
+  # so turning this off narrows what the client does without stopping it.
   ingame_messages: true
 
   # How much of a resource one bundle is worth.

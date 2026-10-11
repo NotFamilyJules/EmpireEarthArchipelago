@@ -674,11 +674,11 @@ class EmpireEarthContext(CommonContext):
             if not name or name in self.sent_research:
                 continue
             loc_id = LOCATION_NAME_TO_ID.get(name)
-            if loc_id is None or loc_id not in self.missing_locations:
+            if loc_id is not None and loc_id in self.missing_locations:
                 self.sent_research.add(name)
-                continue
-            self.sent_research.add(name)
-            new.append(loc_id)
+                new.append(loc_id)
+            elif self.location_settled(loc_id):
+                self.sent_research.add(name)
         if new:
             await self.check_locations(new)
 
@@ -944,6 +944,40 @@ class EmpireEarthContext(CommonContext):
     # every poll would spend two thirds of every half second on it.
     DEEP_SWEEP_POLLS = 20
 
+    def location_settled(self, loc_id: int | None) -> bool:
+        """Can this client stop watching `loc_id` for good?
+
+        Called only when a check has been earned in game and the location is
+        *not* in `missing_locations`. That has two very different causes and
+        this decides which one it is:
+
+        - the seed genuinely doesn't have it, or it was sent already, in which
+          case remembering it locally saves a lookup every poll forever
+        - the client hasn't been told yet, in which case remembering it means
+          the check is never sent at all
+
+        The second is a real bug and not a theoretical one. Archipelago's
+        `Connected` handler sets `ctx.slot` at the top, awaits a send in the
+        middle, and only assigns `missing_locations` at the bottom — so there
+        is a window where this client looks connected and knows no locations.
+        A player reported losing exactly `Build Capitol`, `Recruit Citizen`
+        and `Recruit Female Citizen`: the three checks that are already true
+        the instant a match loads. `Recruit Canine Scout` survived because you
+        have to go and recruit one, which happens well after that window.
+        """
+        if loc_id is None:
+            return True         # not a location this world defines at all
+        if not self.server_locations:
+            return False        # nothing known yet; ask again next poll
+        if loc_id in self.checked_locations:
+            return True         # sent already, this session or an earlier one
+        if loc_id not in self.server_locations:
+            return True         # this seed doesn't have it
+        # Listed by the server, yet in neither set — the two are meant to cover
+        # everything between them, so they're mid-update. Retrying costs one
+        # dictionary lookup; guessing wrong costs the check.
+        return False
+
     async def sync_roster(self):
         """Send a check the first time the player owns a curated type.
 
@@ -976,12 +1010,11 @@ class EmpireEarthContext(CommonContext):
                 if loc in self.sent_objects:
                     continue
                 loc_id = LOCATION_NAME_TO_ID.get(loc)
-                # Locations outside this seed just aren't there.
-                if loc_id is None or loc_id not in self.missing_locations:
+                if loc_id is not None and loc_id in self.missing_locations:
                     self.sent_objects.add(loc)
-                    continue
-                self.sent_objects.add(loc)
-                new_ids.append((loc, loc_id))
+                    new_ids.append((loc, loc_id))
+                elif self.location_settled(loc_id):
+                    self.sent_objects.add(loc)
 
         for loc, loc_id in new_ids:
             await self.check_locations([loc_id])
@@ -1247,7 +1280,13 @@ async def game_watcher(ctx: EmpireEarthContext):
         try:
             if ctx.ensure_attached():
                 warned = False
-                if ctx.server and ctx.slot is not None:
+                # `server_locations` is the last thing Archipelago's
+                # `Connected` handler assigns, and it gets there after an
+                # `await` — so `slot` can be set while the location sets are
+                # still empty. Polling in that window is what lost three
+                # checks; see `location_settled`.
+                if (ctx.server and ctx.slot is not None
+                        and ctx.server_locations):
                     # Before anything reads or writes the tech tree, so a
                     # match that was rebuilt since the last poll is noticed
                     # while every cache still describes the old one.

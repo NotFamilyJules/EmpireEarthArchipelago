@@ -1,0 +1,31 @@
+# The Barracks unit menu, read off a vanilla Art of Conquest game, one row per
+# epoch, positions left to right. `-` is an empty position: that slot's line has
+# no tier in this epoch.
+#
+# This is observation, not derivation. Nothing in the node, its state object or
+# its button holds a menu position, and intervals alone don't pin one down —
+# disjoint runs admit many packings and the game's isn't the minimal one. So the
+# row is written down, and tools/gen_unit_slots.py checks the running game
+# against it rather than trying to work it out.
+#
+# What it settles: slot 4 runs Sampson, Viking, Hand Cannoneer, Trench Mortar,
+# Heavy Mortar, and no upgrade connects any of them. A retired unit's check has
+# to follow its slot, not the upgrade chain, or it stops being sendable the
+# moment the next line takes the position.
+#
+# epoch	positions
+0	Rock Thrower	Clubman
+1	Rock Thrower	Clubman	Spearman	Sampson
+2	-	Maceman	Spearman	Sampson
+3	-	Short Sword	Phalanx
+4	-	Short Sword	Phalanx	Viking	Barbarian
+5	-	Long Sword	Pikeman	Viking	Barbarian
+6	Arquebus	Long Sword	Pikeman
+7	Musketeer	-	Halberdier	Hand Cannoneer	Sharpshooter	Field Medic - Imperial	Elite Guard
+8	Grenadier	Partisan	Halberdier	Hand Cannoneer	Sharpshooter	Field Medic - Imperial	Elite Guard
+9	Doughboy	Partisan	Grenade Launcher	Trench Mortar	Sniper	Field Medic WWII	-	Machine Gun
+10	Marine	-	Bazooka Infantry	Trench Mortar	Sniper	Field Medic WWII	-	Machine Gun	Flame Thrower
+11	Marine	-	Bazooka Infantry	Heavy Mortar	Sniper	Field Medic WWII	Stinger Soldier	Machine Gun	Flame Thrower
+12	Sentinel	-	-	Heavy Mortar	-	Field Medic 13	Stinger Soldier
+13	Guardian	-	-	Heavy Mortar	-	Field Medic 13	Stinger Soldier
+14	Watchman	-	-	Heavy Mortar	-	Field Medic 13	Stinger Soldier

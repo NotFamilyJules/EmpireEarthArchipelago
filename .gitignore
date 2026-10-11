@@ -33,6 +33,18 @@
 !/tools/gen_technologies.py
 # -> world/empire_earth/BuildingEpochs.py needs Empire Earth open, in a match
 !/tools/gen_building_epochs.py
+# -> world/empire_earth/UnitSlots.py      from the menu listings in tools/data
+!/tools/build_unit_slots.py
+# -> world/empire_earth/UnitIcons.py      needs Empire Earth open, in a match
+!/tools/gen_unit_slots.py
+# -> world/empire_earth/TechUnlocks.py    needs Empire Earth open, in a match
+!/tools/gen_tech_unlocks.py
+# -> world/empire_earth/Upgrades.py       which unit replaces which
+!/tools/gen_upgrades.py
+
+# Holds Archipelago's connect handshake open so the connect race can be
+# reproduced on demand. Without it that bug only shows up in a busy room.
+!/tools/race_probe.py
 
 # Libraries the above import.
 !/tools/blast.py
@@ -45,6 +57,11 @@
 # Technologies.py. Not derivable from anything else in the repository.
 !/tools/data/
 !/tools/data/technologies.tsv
+
+# Every build menu, read off a vanilla game by hand across all fifteen epochs.
+# The only source UnitSlots.py has — three attempts to derive it from memory
+# gave tables that looked right and weren't. Losing these means doing it again.
+!/tools/data/*_slots.tsv
 
 # Python bytecode
 __pycache__/

@@ -1,0 +1,15 @@
+# The Archery Range unit menu, read off a vanilla Art of Conquest game, one row
+# per epoch, positions left to right. `-` is an empty position. Format and
+# reasoning as in barracks_slots.tsv.
+#
+# The building doesn't exist in the Prehistoric Age, and from the Imperial Age
+# it offers nothing and can no longer be built — so epochs 0 and 7..14 have no
+# row rather than an empty one.
+#
+# epoch	positions
+1	-	Slinger
+2	-	Simple Bowman
+3	Javelin	Simple Bowman	Chariot Archer	Elephant Archer
+4	Pilum	Composite Bow	Chariot Archer	Elephant Archer	Cross Bow
+5	Pilum	Long Bow	Cavalry Archer	-	Cross Bow
+6	-	Long Bow	Cavalry Archer	-	Cross Bow

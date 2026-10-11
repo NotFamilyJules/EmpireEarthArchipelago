@@ -1,0 +1,27 @@
+# The Temple unit menu, read off a vanilla Art of Conquest game. Format and
+# reasoning as in barracks_slots.tsv.
+#
+# It never rotates. Two positions, a Priest and a Prophet, from the Temple's
+# first epoch to the last — everything else on the Temple's screen is research,
+# which lives in the technology tables and not here. So the Temple contributes
+# no slot succession at all, and neither unit's check can ever be lost to a
+# later line taking its position.
+#
+# Recorded anyway. "No rotation" is a finding, and without it written down the
+# next person has to open the game to learn that the Prophet is safe.
+#
+# epoch	positions
+1	Priest	Prophet
+2	Priest	Prophet
+3	Priest	Prophet
+4	Priest	Prophet
+5	Priest	Prophet
+6	Priest	Prophet
+7	Priest	Prophet
+8	Priest	Prophet
+9	Priest	Prophet
+10	Priest	Prophet
+11	Priest	Prophet
+12	Priest	Prophet
+13	Priest	Prophet
+14	Priest	Prophet

@@ -1,0 +1,83 @@
+# The remaining unit menus, read off a vanilla Art of Conquest game, one row per
+# epoch, positions left to right. `-` is an empty position. Format and reasoning
+# as in barracks_slots.tsv.
+#
+# Names here are AS SEEN ON SCREEN and still need reconciling to the display
+# names in Objects.py before this becomes UnitSlots.py — the game's UI and the
+# object database disagree often ("Ballista" against `Gun Spear06 Balistae`,
+# "Colossus Artillery" against `Gun Artillery13 Colossus`, "Canine Scout"
+# against `Domestic Wolf`). Recorded verbatim rather than translated on the way
+# in, because a wrong translation here is invisible later.
+#
+# Watch for one collision when reconciling: the Siege Factory's tier-4 unit
+# shows as "Siege Tower" and the database calls it `Siege04 - Tower`, which
+# displays as "Tower" — the same display name as the Tower building added for
+# the defence-line checks.
+#
+# building	epoch	positions
+Siege Factory	3	Stone Thrower	Ram	Catapult	Siege Tower
+Siege Factory	4	Stone Thrower	Ram	Catapult	Siege Tower
+Siege Factory	5	Ballista	Heavy Ram	Trebuchet	Heavy Siege Tower
+Siege Factory	6	Ballista	Heavy Ram	Trebuchet	Heavy Siege Tower	Culverin	Basilisk
+Siege Factory	7	-	-	-	-	Culverin	Basilisk	Bombard
+Siege Factory	8	-	-	-	-	Bronze Cannon	Serpentine	Bombard
+Siege Factory	9	-	-	-	-	-	Howitzer Cannon	Artillery	57mm AT Gun
+Siege Factory	10	-	-	-	-	-	Howitzer Cannon	Artillery	57mm AT Gun
+Siege Factory	11	-	-	-	-	-	Howitzer Cannon	Artillery	120mm AT Gun
+Siege Factory	12	-	-	-	-	-	Paladin Cannon	Colossus Artillery	Thor AT Gun
+Siege Factory	13	-	-	-	-	-	Paladin Cannon	Colossus Artillery	Hercules AT Gun
+Siege Factory	14	-	-	-	-	-	Paladin Cannon	Colossus Artillery	Hercules AT Gun
+Dock	1	Fishing Raft	Transport Raft	-	-	War Raft
+Dock	2	Fishing Raft	Transport - Copper	-	Battleship - Copper	Frigate - Copper	Galley - Copper
+Dock	3	Fishing Boat - Bronze	Transport - Bronze	-	Battleship - Bronze	Frigate - Bronze	Galley - Bronze
+Dock	4	Fishing Boat - Bronze	Transport - Bronze	-	Battleship - Byzantine	Frigate - Byzantine	Galley - Byzantine
+Dock	5	Fishing Boat - Bronze	Transport - Bronze	-	Battleship - Middle Ages	Frigate - Middle Ages	Galley - Middle Ages
+Dock	6	Fishing Boat - Bronze	Transport - Bronze	-	Battleship - Renaissance	Frigate - Renaissance	Galleon - Renaissance
+Dock	7	Fishing Boat - Imperial	Transport - Imperial	-	Battleship - Imperial	Frigate - Imperial	Galleon - Imperial	-	Cruiser - Gunboat
+Dock	8	Fishing Boat - Imperial	Transport - Imperial	-	Battleship - Royal	Frigate - Royal	Galleon - Royal	-	Cruiser - Gunboat
+Dock	9	Fishing Boat - Imperial	Transport - Atomic	-	Battleship - Dreadnought	Frigate - Good Hope	-	-	Cruiser - Darbo
+Dock	10	Fishing Boat - Trawler	Transport - Atomic	-	Battleship - Bismarck	Frigate - Warrington	-	-	Cruiser - Darbo
+Dock	11	Fishing Boat - Trawler	Transport - Atomic	-	Battleship - Bismarck	Frigate - Warrington	-	-	Cruiser - Darbo
+Dock	12	Fishing Boat - Digital	Transport - Gargantua	-	Battleship - Leviathan	Frigate - Juggernaut	-	-	Cruiser - Sagitarrian
+Dock	13	Fishing Boat - Digital	Transport - Gargantua	-	Battleship - Leviathan	Frigate - Juggernaut	-	-	Cruiser - Sagitarrian
+Dock	14	Fishing Boat - Digital	Transport - Gargantua	-	Battleship - Leviathan	Frigate - Juggernaut	-	-	Cruiser - Sagitarrian
+Naval Yard	9	Sub - U-Boat
+Naval Yard	10	Sub - U-Boat	Carrier - Enterprise
+Naval Yard	11	Sub - Nautilus	Carrier - Enterprise	Sub - Trident	-	-	-	-	-	Sea King
+Naval Yard	12	Sub - Nautilus	Carrier - Nexus	Sub - Trident	-	-	-	-	-	Sea King
+Naval Yard	13	Sub - Hammerhead	Carrier - Nexus	Sub - Triton	-	-	-	-	-	Sea King II
+Naval Yard	14	Sub - Hammerhead	Carrier - Nexus	Sub - Triton	-	-	-	-	-	Sea King II
+Airport	9	-	Fokker Fighter/Bomber	Sopwith Fighter	-	Gotha Bomber
+Airport	10	ME262 Fighter/Bomber	P-51 Fighter	-	B-17 Bomber	B-29 Bomber	Typhoon Anti-Tank
+Airport	11	F-117 Fighter/Bomber	F-15 Fighter	-	B-2 Bomber	B-52 Bomber	A-10 Anti-Tank	Sea King	Helicopter Transport	Helicopter Anti-Tank	Helicopter Gunship
+Airport	12	Talon Fighter/Bomber	Jackal Fighter	-	B-122 Wyvern	Titan Bomber	A-10 Anti-Tank	Sea King	Pegasus Transport	Spectre AT Helicopter	Reaper Gunship
+Airport	13	Phoenix Fighter/Bomber	Nebula Fighter	-	B-122 Wyvern Bomber	Titan Bomber	Sea King II	Pegasus Transport	Spectre AT Helicopter	Reaper Gunship
+Airport	14	Phoenix Fighter/Bomber	Nebula Fighter	-	B-122 Wyvern Bomber	Titan Bomber	Sea King II	Pegasus Transport	Spectre AT Helicopter	Reaper Gunship	-	Planetary Fighter
+Tank Factory	9	MkV Tank (HE)	A7V Tank (AP)	Flak Halftrack
+Tank Factory	10	Sherman Tank (HE)	Panzer Tank (AP)	Flak Halftrack
+Tank Factory	11	M1 Tank (HE)	Leopard Tank (AP)	Flak Halftrack
+Tank Factory	12	Gladiator Tank	-	Skywatcher AA	-	-	-	-	-	-	Anti Missile Battery
+Tank Factory	13	Centurion Tank	-	Skywatcher AA	-	-	-	-	-	-	Anti Missile Battery
+Tank Factory	14	Centurion Tank	-	Skywatcher AA	-	-	-	-	-	-	Anti Missile Battery
+Capitol	0	Citizen	Canine Scout
+Capitol	1	Citizen	Canine Scout
+Capitol	2	Citizen	Canine Scout	Sargon of Akkad	Gilgamesh
+Capitol	3	Citizen	Canine Scout	Alexander the Great	Hannibal
+Capitol	4	Citizen	Canine Scout	Charlemagne	Julius Caesar
+Capitol	5	Citizen	Canine Scout	William the Conqueror	Richard the Lionheart
+Capitol	6	Citizen	Canine Scout	Isabella of Castile	Henry V
+Capitol	7	Citizen	Canine Scout	Elizabeth I	Oliver Cromwell
+Capitol	8	Citizen	Canine Scout	Otto von Bismarck	Napoleon	-	-	-	-	-	-	Hot Air Balloon
+Capitol	9	Citizen	Canine Scout	DeVerran	Manfred von Richthofen	-	-	-	-	-	-	Observation Balloon
+Capitol	10	Citizen	Canine Scout	Erwin Rommel	Travis Shackelford	-	-	-	-	-	-	Hot Air Balloon
+Capitol	11	Citizen	Canine Scout	RW Bresden	Dennis St. Albans	-	-	-	-	-	-	Hot Air Balloon
+Capitol	12	Citizen	Canine Scout	Alexi Septimus	Sergei Molotov
+Capitol	13	Citizen	Canine Scout	Molly Ryan	Cyborg Molotov
+Capitol	14	Citizen	Canine Scout	Khan Sun Do	Hu Kwan Do
+Cyber Factory	12	Hyperion	Ares	Pandora	Minotaur
+Cyber Factory	13	Hyperion II	Ares II	Pandora II	Minotaur II	Zeus
+Cyber Factory	14	Hyperion II	Ares II	Pandora II	Minotaur II	Zeus
+Cyber Laboratory	12	Apollo	Furies	Tempest
+Cyber Laboratory	13	Apollo	Furies	Tempest	Hades	Poseidon
+Cyber Laboratory	14	Apollo	Furies	Tempest	Hades	Poseidon
+Space Dock	14	-	Space Capital Ship	Space Carrier	Space Transport	Space Corvette

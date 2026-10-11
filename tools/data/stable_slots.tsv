@@ -1,0 +1,17 @@
+# The Stable unit menu, read off a vanilla Art of Conquest game, one row per
+# epoch, positions left to right. `-` is an empty position. Format and
+# reasoning as in barracks_slots.tsv.
+#
+# The building doesn't exist in the Prehistoric or Stone Age, and from Atomic
+# Age - WW1 it offers nothing — the Tank Factory takes its position in the
+# build menu at that epoch (see building_slots.tsv). So epochs 0, 1 and 9..14
+# have no row.
+#
+# epoch	positions
+2	-	Horseman
+3	-	Horseman	Bronze Spear Cavalry	War Elephant
+4	-	Cataphract	Bronze Spear Cavalry	War Elephant	Persian Cavalry
+5	-	Cataphract	Knight	-	Persian Cavalry
+6	Carabineers (gun)	Royal Cuirassier (Sword)	Knight
+7	Carabineers (gun)	Royal Cuirassier (Sword)
+8	Dragoon (gun)	Imperial Cuirassier Sword

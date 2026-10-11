@@ -1,0 +1,26 @@
+# The citizen's build menu, read off a vanilla Art of Conquest game, one row per
+# epoch. `-` is an empty position. Bottom row first, then `/`, then the top row.
+# Format and reasoning as in barracks_slots.tsv.
+#
+# Buildings share positions the same way units do, which is the part that
+# matters: the Archery Range retires and the Airport takes its slot, the Stable
+# retires and the Tank Factory takes its slot. Hold either open and its
+# successor never appears — no Airport, no Tank Factory, and none of the units
+# they produce.
+#
+# epoch	bottom row	/	top row
+0	Settlement	House	Tower	-	-	Barracks	-	-	-	-	Temple
+1	Settlement	House	Tower	-	Dock	Barracks	Archery Range	-	-	-	Temple
+2	Settlement	House	Tower	Wall	Dock	Barracks	Archery Range	Stable	-	Granary	Temple	Hospital	University	Fortress	/	-	Palisade Tower	-	Palisade Wall	-	-	-	-	Tower of Babylon	Coliseum	Pharos Lighthouse	Temple of Zeus	Ishtar gates	Library of Alexandria
+3	Settlement	House	Tower	Wall	Dock	Barracks	Archery Range	Stable	Siege Factory	Granary	Temple	Hospital	University	Fortress	/	-	Palisade Tower	-	Palisade Wall	-	-	-	-	Tower of Babylon	Coliseum	Pharos Lighthouse	Temple of Zeus	Ishtar gates	Library of Alexandria
+4	Settlement	House	Tower	Wall	Dock	Barracks	Archery Range	Stable	Siege Factory	Granary	Temple	Hospital	University	Fortress	/	-	Palisade Tower	-	Palisade Wall	-	-	-	-	Tower of Babylon	Coliseum	Pharos Lighthouse	Temple of Zeus	Ishtar gates	Library of Alexandria
+5	Settlement	House	Tower	Wall	Dock	Barracks	Archery Range	Stable	Siege Factory	Granary	Temple	Hospital	University	Fortress	/	-	Palisade Tower	-	Palisade Wall	-	-	-	-	Tower of Babylon	Coliseum	Pharos Lighthouse	Temple of Zeus	Ishtar gates	Library of Alexandria
+6	Settlement	House	Tower	Wall	Dock	Barracks	Archery Range	Stable	Siege Factory	Granary	Temple	Hospital	University	Fortress	/	-	Palisade Tower	-	Palisade Wall	-	-	-	-	Tower of Babylon	Coliseum	Pharos Lighthouse	Temple of Zeus	Ishtar gates	Library of Alexandria
+7	Settlement	House	Tower	Wall	Dock	Barracks	-	Stable	Siege Factory	Granary	Temple	Hospital	University	Fortress	/	-	Palisade Tower	-	Palisade Wall	-	-	-	-	Tower of Babylon	Coliseum	Pharos Lighthouse	Temple of Zeus	Ishtar gates	Library of Alexandria
+8	Settlement	House	Tower	Wall	Dock	Barracks	-	Stable	Siege Factory	Granary	Temple	Hospital	University	Fortress	/	-	Palisade Tower	-	Palisade Wall	-	-	-	-	Tower of Babylon	Coliseum	Pharos Lighthouse	Temple of Zeus	Ishtar gates	Library of Alexandria
+9	Settlement	House	Tower	Wall	Dock	Barracks	Airport	Tank Factory	Siege Factory	Granary	Temple	Hospital	University	Fortress	/	-	Palisade Tower	88mm AA Gun	Palisade Wall	Naval Yard	-	-	-	Tower of Babylon	Coliseum	Pharos Lighthouse	Temple of Zeus	Ishtar gates	Library of Alexandria
+10	Settlement	House	Tower	Wall	Dock	Barracks	Airport	Tank Factory	Siege Factory	Granary	Temple	Hospital	University	Fortress	/	-	Palisade Tower	88mm AA Gun	Palisade Wall	Naval Yard	-	-	-	Tower of Babylon	Coliseum	Pharos Lighthouse	Temple of Zeus	Ishtar gates	Library of Alexandria
+11	Settlement	House	Tower	Wall	Dock	Barracks	Airport	Tank Factory	Siege Factory	Granary	Temple	Hospital	University	Fortress	/	-	Palisade Tower	88mm AA Gun	Palisade Wall	Naval Yard	-	-	-	Tower of Babylon	Coliseum	Pharos Lighthouse	Temple of Zeus	Ishtar gates	Library of Alexandria
+12	Settlement	House	Tower	Wall	Dock	Barracks	Airport	Tank Factory	Siege Factory	Granary	Temple	Hospital	University	Fortress	/	-	Palisade Tower	88mm AA Gun	Palisade Wall	Naval Yard	Cyber Factory	Cyber Laboratory	-	Tower of Babylon	Coliseum	Pharos Lighthouse	Temple of Zeus	Ishtar gates	Library of Alexandria
+13	Settlement	House	Tower	Wall	Dock	Barracks	Airport	Tank Factory	Siege Factory	Granary	Temple	Hospital	University	Fortress	/	-	Palisade Tower	88mm AA Gun	Palisade Wall	Naval Yard	Cyber Factory	Cyber Laboratory	-	Tower of Babylon	Coliseum	Pharos Lighthouse	Temple of Zeus	Ishtar gates	Library of Alexandria
+14	Settlement	House	Tower	Wall	Dock	Barracks	Airport	Tank Factory	Siege Factory	Granary	Temple	Hospital	University	Fortress	/	-	Palisade Tower	88mm AA Gun	Palisade Wall	Naval Yard	Cyber Factory	Cyber Laboratory	Teleporter	Tower of Babylon	Coliseum	Pharos Lighthouse	Temple of Zeus	Ishtar gates	Library of Alexandria
