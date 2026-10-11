@@ -11,6 +11,7 @@ from .Items import (
     ITEM_NAME_TO_ID,
     ITEM_TABLE,
     LOCKABLE_BUILDINGS,
+    PROGRESSIVE_EPOCH_ITEM,
     RESOURCE_ITEM_NAMES,
     EmpireEarthItem,
 )
@@ -93,6 +94,10 @@ class EmpireEarthWorld(World):
     @property
     def starting_epoch(self) -> int:
         return int(self.options.starting_epoch.value)
+
+    @property
+    def progressive_epochs(self) -> bool:
+        return bool(self.options.progressive_epoch_unlocks.value)
 
     @property
     def wonders_needed(self) -> int:
@@ -200,11 +205,11 @@ class EmpireEarthWorld(World):
             and name[len("Tech: "):] not in EXCLUDED_TECHNOLOGIES
         ]
 
-    def buildings_needed_for(self, name: str) -> list[tuple[str, list[str]]]:
+    def buildings_needed_for(self, name: str) -> list[tuple[str, int]]:
         """Ways to satisfy `name`'s building requirement, as a disjunction.
 
-        Each option is an unlock item paired with the epoch items needed to
-        build that building. Both halves are required — holding
+        Each option is an unlock item paired with the epoch needed to build
+        that building. Both halves are required — holding
         `Building: Siege Factory` is no use in the Copper Age, because you
         can't build one until the Dark Age.
 
@@ -216,15 +221,15 @@ class EmpireEarthWorld(World):
         if not self.gates_buildings:
             return []
 
-        def option(building: str) -> tuple[str, list[str]]:
+        def option(building: str) -> tuple[str, int]:
             floor = LOCATION_MIN_EPOCH.get(f"Build {building}", 0)
-            return building_item(building), self.epoch_items_up_to(floor)
+            return building_item(building), floor
 
         if name.startswith("Build "):
             building = name[len("Build "):]
             if building in LOCKABLE_BUILDINGS:
                 # The epoch half is already required by the location's own floor.
-                return [(building_item(building), [])]
+                return [(building_item(building), self.starting_epoch)]
             # Something reached through another building — a Town Center is
             # five citizens garrisoned in a Settlement — needs whatever gates
             # the building it comes from.
@@ -346,7 +351,13 @@ class EmpireEarthWorld(World):
         # priority locations, so this puts the one item that opens the seed
         # where it has to be and the other three fill normally.
         self.multiworld.early_items[self.player][
-            f"Epoch: {EPOCH_NAMES[self.starting_epoch + 1]}"] = 1
+            self.epoch_item_for(self.starting_epoch + 1)] = 1
+        if self.gates_buildings:
+            available = set(self.unlock_items())
+            for name in ("Settlement", "Dock", "Siege Factory"):
+                item = building_item(name)
+                if item in available:
+                    self.multiworld.early_items[self.player][item] = 1
 
     def included_epochs(self) -> range:
         """Epochs that become items and checks.
@@ -386,10 +397,16 @@ class EmpireEarthWorld(World):
     def create_items(self) -> None:
         from .Epochs import EPOCH_NAMES
 
-        pool = [
-            self.create_item(f"Epoch: {EPOCH_NAMES[i]}")
-            for i in self.included_epochs()
-        ]
+        if self.progressive_epochs:
+            pool = [
+                self.create_item(PROGRESSIVE_EPOCH_ITEM)
+                for _i in self.included_epochs()
+            ]
+        else:
+            pool = [
+                self.create_item(f"Epoch: {EPOCH_NAMES[i]}")
+                for i in self.included_epochs()
+            ]
         pool += [self.create_item(name) for name in self.unlock_items()]
         pool += [self.create_item(name) for name in self.tech_items()]
         # Far more checks than epoch unlocks, so the rest of the pool is
@@ -404,6 +421,14 @@ class EmpireEarthWorld(World):
     def get_filler_item_name(self) -> str:
         return self.random.choice(RESOURCE_ITEM_NAMES)
 
+    def epoch_item_for(self, epoch: int) -> str:
+        if self.progressive_epochs:
+            return PROGRESSIVE_EPOCH_ITEM
+
+        from .Epochs import EPOCH_NAMES
+
+        return f"Epoch: {EPOCH_NAMES[epoch]}"
+
     def epoch_items_up_to(self, epoch: int) -> list[str]:
         """The unlocks needed to be in `epoch`.
 
@@ -417,6 +442,17 @@ class EmpireEarthWorld(World):
             f"Epoch: {EPOCH_NAMES[j]}"
             for j in range(self.starting_epoch + 1, epoch + 1)
         ]
+
+    def has_epoch_access(self, state, epoch: int) -> bool:
+        if epoch <= self.starting_epoch:
+            return True
+        if self.progressive_epochs:
+            return state.has(
+                PROGRESSIVE_EPOCH_ITEM,
+                self.player,
+                epoch - self.starting_epoch,
+            )
+        return state.has_all(self.epoch_items_up_to(epoch), self.player)
 
     def included_object_locations(self) -> set[str]:
         """Build, recruit and research checks this seed can actually reach."""
@@ -450,17 +486,24 @@ class EmpireEarthWorld(World):
         return wanted
 
     def set_rules(self) -> None:
-        from worlds.generic.Rules import set_rule
+        from worlds.generic.Rules import forbid_item, set_rule
 
         from .Epochs import EPOCH_NAMES
 
         wanted = self.included_object_locations()
 
+        if self.progressive_epochs:
+            for name in ("Recruit Citizen", "Recruit Female Citizen"):
+                forbid_item(
+                    self.multiworld.get_location(name, self.player),
+                    PROGRESSIVE_EPOCH_ITEM,
+                    self.player,
+                )
+
         for i in self.included_epochs():
-            needed = self.epoch_items_up_to(i)
             set_rule(
                 self.multiworld.get_location(f"Reach {EPOCH_NAMES[i]}", self.player),
-                lambda state, n=needed: state.has_all(n, self.player),
+                lambda state, e=i: self.has_epoch_access(state, e),
             )
 
         # Everything you build or recruit has an epoch floor, and a check out
@@ -469,8 +512,6 @@ class EmpireEarthWorld(World):
         # can't be built without it.
         for name in sorted(wanted):
             floor = LOCATION_MIN_EPOCH.get(name, 0)
-            needed = ([] if floor <= self.starting_epoch
-                      else self.epoch_items_up_to(floor))
             # A chained technology used to require the `Tech:` item below it,
             # because suppressing a technology's effect suppressed the unlock
             # it carried along with the benefit. The client puts the unlock
@@ -487,25 +528,24 @@ class EmpireEarthWorld(World):
             # the game tests that separately in the same predicate — and
             # reaching the epoch doesn't skip the unlock.
             unlocks = self.buildings_needed_for(name)
-            if not needed and not unlocks:
+            if floor <= self.starting_epoch and not unlocks:
                 continue        # available from the moment the match starts
             set_rule(
                 self.multiworld.get_location(name, self.player),
-                lambda state, n=needed, u=unlocks: (
-                    state.has_all(n, self.player)
+                lambda state, e=floor, u=unlocks: (
+                    self.has_epoch_access(state, e)
                     and (not u or any(
                         state.has(item, self.player)
-                        and state.has_all(eps, self.player)
-                        for item, eps in u
+                        and self.has_epoch_access(state, building_epoch)
+                        for item, building_epoch in u
                     ))
                 ),
             )
 
         conditions = []
         if self.wants_epoch:
-            goal_item = f"Epoch: {EPOCH_NAMES[self.goal_epoch]}"
             conditions.append(
-                lambda state, item=goal_item: state.has(item, self.player)
+                lambda state: self.has_epoch_access(state, self.goal_epoch)
             )
         if self.wants_wonders:
             # A wonder needs its epoch and, with gating on, its unlock. Any N
@@ -513,17 +553,17 @@ class EmpireEarthWorld(World):
             # fill decides what a run actually finds, and demanding a
             # particular set would be wrong in both directions.
             wanted_wonders = [
-                (self.epoch_items_up_to(epoch), unlocks)
+                (epoch, unlocks)
                 for epoch, unlocks in self.wonder_options()
             ]
 
             def enough_wonders(state, need=self.wonders_needed,
                                options=wanted_wonders) -> bool:
                 built = 0
-                for epochs, unlocks in options:
+                for epoch, unlocks in options:
                     if not state.has_all(unlocks, self.player):
                         continue
-                    if not state.has_all(epochs, self.player):
+                    if not self.has_epoch_access(state, epoch):
                         continue
                     built += 1
                     if built >= need:
@@ -570,6 +610,7 @@ class EmpireEarthWorld(World):
             "starting_epoch": self.starting_epoch,
             "goal_epoch": self.goal_epoch,
             "goal": self.options.goal.current_key,
+            "progressive_epoch_unlocks": self.progressive_epochs,
             "opponents": self.options.opponents.current_key,
             "ingame_messages": bool(self.options.ingame_messages.value),
             # Kept so an older client still understands this seed.

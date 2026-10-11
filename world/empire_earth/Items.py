@@ -45,6 +45,12 @@ except ImportError:  # loaded as a top-level module by tools/
 # One unlock per epoch you can advance INTO, so everything after the first.
 # Receiving `Epoch: Stone Age` is what lets you press Advance in the Capitol.
 EPOCH_ITEM_BASE = 100
+PROGRESSIVE_EPOCH_ITEM = "Progressive Epoch"
+PROGRESSIVE_EPOCH_ID = BASE_ID + EPOCH_ITEM_BASE
+ITEM_TABLE[PROGRESSIVE_EPOCH_ITEM] = (
+    EPOCH_ITEM_BASE, ItemClassification.progression, None,
+)
+
 EPOCH_ITEMS: dict[str, int] = {
     f"Epoch: {name}": i for i, name in enumerate(EPOCH_NAMES) if i >= 1
 }

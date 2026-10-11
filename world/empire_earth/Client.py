@@ -47,6 +47,7 @@ from .Items import (
     ITEM_ID_TO_TECH,
     ITEM_ID_TO_RESOURCE,
     LOCKABLE_BUILDINGS,
+    PROGRESSIVE_EPOCH_ID,
 )
 from .Locations import (
     BUILD_LOCATION_BY_DBNAME,
@@ -264,6 +265,7 @@ class EmpireEarthContext(CommonContext):
         self.last_reached = -1
         self.goal_epoch = len(EPOCH_NAMES) - 1
         self.starting_epoch = 0
+        self.progressive_epochs = False
         self.goal_kind = "reach_epoch"
         self.wonders_needed = 0
         self.wonders_built = 0
@@ -311,6 +313,9 @@ class EmpireEarthContext(CommonContext):
             self.bundle_size = int(slot_data.get("bundle_size", 500))
             self.goal_epoch = int(slot_data.get("goal_epoch", len(EPOCH_NAMES) - 1))
             self.starting_epoch = int(slot_data.get("starting_epoch", 0))
+            self.progressive_epochs = bool(
+                slot_data.get("progressive_epoch_unlocks", False)
+            )
             self.goal_kind = str(slot_data.get("goal", "reach_epoch"))
             self.wonders_needed = int(slot_data.get("wonders_needed", 0))
             self.gates_buildings = bool(slot_data.get("building_unlocks", False))
@@ -617,11 +622,19 @@ class EmpireEarthContext(CommonContext):
         Idempotent by design — the server replays the whole list on reconnect,
         and an unlock is a state, not an event.
         """
-        self.unlocked_epochs = {
-            ITEM_ID_TO_EPOCH[i.item]
-            for i in self.items_received
-            if i.item in ITEM_ID_TO_EPOCH
-        }
+        if self.progressive_epochs:
+            count = sum(
+                1 for i in self.items_received
+                if i.item == PROGRESSIVE_EPOCH_ID
+            )
+            last = min(self.goal_epoch, self.starting_epoch + count)
+            self.unlocked_epochs = set(range(self.starting_epoch + 1, last + 1))
+        else:
+            self.unlocked_epochs = {
+                ITEM_ID_TO_EPOCH[i.item]
+                for i in self.items_received
+                if i.item in ITEM_ID_TO_EPOCH
+            }
 
     def sync_permanence(self):
         """Keep every unit recruitable, so no check can expire.

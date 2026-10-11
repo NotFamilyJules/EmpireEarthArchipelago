@@ -1005,6 +1005,11 @@ for _earlier, _later in BUILDING_SUCCESSORS.items():
         LOCATION_ALSO_SENDS[_here] = tuple(
             dict.fromkeys(LOCATION_ALSO_SENDS.get(_here, ()) + tuple(_olds)))
 
+LOCATION_ALSO_SENDS["Recruit Heavy Siege Tower"] = tuple(dict.fromkeys(
+    LOCATION_ALSO_SENDS.get("Recruit Heavy Siege Tower", ())
+    + ("Recruit Siege Tower",)
+))
+
 # Location name -> the buildings that can train it. Resolved per unit, so the
 # rules never go back to the family — which is what got the Canine Scout
 # wrong.

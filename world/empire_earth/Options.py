@@ -246,6 +246,12 @@ class GoalEpoch(Choice):
     default = 14
 
 
+class ProgressiveEpochUnlocks(Toggle):
+    """Use repeated Progressive Epoch items instead of named epoch unlocks."""
+
+    display_name = "Progressive Epoch Unlocks"
+
+
 class MapSize(Choice):
     """Map size. The client forces this on the skirmish setup screen."""
 
@@ -363,6 +369,7 @@ class EmpireEarthOptions(PerGameCommonOptions):
     goal: Goal
     starting_epoch: StartingEpoch
     goal_epoch: GoalEpoch
+    progressive_epoch_unlocks: ProgressiveEpochUnlocks
     building_unlocks: BuildingUnlocks
     wonder_unlocks: WonderUnlocks
     technology_checks: TechnologyChecks
